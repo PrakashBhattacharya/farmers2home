@@ -9,18 +9,17 @@ const cors = require('cors');
 const app = express();
 
 connectDB();
-
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to the homepage!');
+});
 app.use(express.json());
 app.use(cors()); 
-app.get('/', (req, res) => {
-  res.send('Active status true');
-});
 
 app.use('/api/auth', userRoutes);
 app.use('/api/products', productRoutes); 
 app.use('/api/orders', orderRoutes); 
 
-const port = process.env.PORT || 8000;0.
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

@@ -1,5 +1,6 @@
 const Order = require('../Models/Order');
 const Product = require('../Models/Product');
+const { sendEmail, verifyEmailConfig } = require('../services/emailService');
 
 const createOrder = async (req, res) => {
   try {
@@ -73,16 +74,78 @@ const getAllOrders = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, rejectionReason } = req.body;
 
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
+      .populate('customer', 'name email')
+      .populate('items.product', 'name price');
+
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
+    const oldStatus = order.status;
     order.status = status;
+    if (status === 'rejected' && rejectionReason) {
+      order.rejectionReason = rejectionReason;
+    }
     await order.save();
 
-    res.json({ message: 'Order status updated', order });
+    // Prepare order details for email
+    const orderDetails = {
+      orderId: order._id,
+      customerName: order.customer.name,
+      productName: order.items[0].product.name,
+      quantity: order.items[0].quantity,
+      totalAmount: order.totalPrice,
+      orderDate: order.createdAt.toLocaleDateString(),
+      deliveryDate: status === 'delivered' ? new Date().toLocaleDateString() : null,
+      rejectionReason: order.rejectionReason
+    };
+
+    // Send email based on status change
+    let emailTemplate;
+    switch (status.toLowerCase()) {
+      case 'accepted':
+        emailTemplate = 'orderAccepted';
+        break;
+      case 'rejected':
+        emailTemplate = 'orderRejected';
+        break;
+      case 'delivered':
+        emailTemplate = 'orderDelivered';
+        break;
+      default:
+        emailTemplate = null;
+    }
+
+    if (emailTemplate && order.customer.email) {
+      try {
+        // Verify email configuration before sending
+        const isEmailConfigValid = await verifyEmailConfig();
+        if (!isEmailConfigValid) {
+          console.error('Email configuration is invalid. Please check your .env file.');
+          return res.status(500).json({ 
+            message: 'Order status updated but email notification failed',
+            order 
+          });
+        }
+
+        await sendEmail(order.customer.email, emailTemplate, orderDetails);
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        return res.status(500).json({ 
+          message: 'Order status updated but email notification failed',
+          error: emailError.message,
+          order 
+        });
+      }
+    }
+
+    res.json({ 
+      message: 'Order status updated successfully',
+      order 
+    });
   } catch (err) {
+    console.error('Error updating order status:', err);
     res.status(500).json({ error: 'Failed to update order status' });
   }
 };
