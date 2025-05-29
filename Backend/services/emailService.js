@@ -2,23 +2,37 @@ const nodemailer = require('nodemailer');
 const winston = require('winston');
 const path = require('path');
 
+// Determine if running in production (like Vercel)
+const isProduction = process.env.NODE_ENV === 'production';
+
 // Configure logger
+const transports = [
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple()
+    )
+  })
+];
+
+// Only add file transport if NOT in production
+if (!isProduction) {
+  transports.push(
+    new winston.transports.File({
+      filename: path.join(__dirname, '../logs/email.log'),
+      maxsize: 5242880, // 5MB
+      maxFiles: 5
+    })
+  );
+}
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.File({ 
-      filename: path.join(__dirname, '../logs/email.log'),
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-    new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  ]
+  transports
 });
 
 // Create reusable transporter
@@ -165,4 +179,4 @@ module.exports = {
   sendEmail,
   emailTemplates,
   verifyEmailConfig
-}; 
+};
