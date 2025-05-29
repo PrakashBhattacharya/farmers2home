@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import config from '../config';
 import '../styles/Register.css';
 
 const Register = () => {
@@ -70,7 +69,7 @@ const Register = () => {
 
   const registerUser = async (userData) => {
     try {
-      const response = await axios.post(`${config.API_BASE_URL}/auth/register`, userData);
+      const response = await axios.post('http://localhost:8000/api/auth/register', userData);
       return { success: true, data: response.data };
     } catch (error) {
       return {

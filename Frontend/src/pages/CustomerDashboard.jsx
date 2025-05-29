@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import config from '../config';
 import '../styles/CustomerDashboard.css';
 
 const CustomerDashboard = () => {
@@ -29,7 +28,7 @@ const CustomerDashboard = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${config.API_BASE_URL}/products`);
+      const response = await axios.get('http://localhost:8000/api/products');
       setProducts(response.data.products || []);
       setFilteredProducts(response.data.products || []);
     } catch (err) {
@@ -93,7 +92,7 @@ const CustomerDashboard = () => {
       }
 
       const response = await axios.post(
-        `${config.API_BASE_URL}/orders`,
+        'http://localhost:8000/api/orders',
         {
           items: [{ product: selectedProduct._id, quantity: orderForm.quantity }],
           deliveryType: orderForm.deliveryType,

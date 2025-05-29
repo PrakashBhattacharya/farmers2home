@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import config from '../config';
 import '../styles/Login.css'; 
 
 const Login = () => {
@@ -12,7 +10,6 @@ const Login = () => {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,15 +18,16 @@ const Login = () => {
     setErrorMessage('');
 
     try {
-      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
+      const response = await axios.post('http://localhost:8000/api/auth/login', {
         email,
         password,
       });
 
       const { token, user } = response.data;
-      
-      // Use the login function from AuthContext
-      login(token, user);
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
       setLoginSuccess(true);
       
       // Navigate after a short delay to show the success message

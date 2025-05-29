@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import config from '../config';
 import '../styles/FarmerDashboard.css';
 
 const FarmerDashboard = () => {
@@ -46,7 +45,7 @@ const FarmerDashboard = () => {
         return;
       }
 
-      const response = await axios.get(`${config.API_BASE_URL}/products/my-products`, {
+      const response = await axios.get('http://localhost:8000/api/products/my-products', {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -147,7 +146,7 @@ const FarmerDashboard = () => {
 
       if (selectedProduct) {
         await axios.put(
-          `${config.API_BASE_URL}/products/${selectedProduct._id}`,
+          `http://localhost:8000/api/products/${selectedProduct._id}`,
           productData,
           { 
             headers: { 
@@ -159,7 +158,7 @@ const FarmerDashboard = () => {
         setMessage('Product updated successfully!');
       } else {
         await axios.post(
-          `${config.API_BASE_URL}/products`,
+          'http://localhost:8000/api/products',
           productData,
           { 
             headers: { 
@@ -200,7 +199,7 @@ const FarmerDashboard = () => {
       }
 
       await axios.delete(
-        `${config.API_BASE_URL}/products/${productId}`,
+        `http://localhost:8000/api/products/${productId}`,
         { 
           headers: { 
             Authorization: `Bearer ${token}`,
