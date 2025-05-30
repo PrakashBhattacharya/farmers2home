@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const winston = require('winston');
 const path = require('path');
 
-// ✅ Logger using /tmp (safe for AWS Lambda)
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -21,7 +21,6 @@ const logger = winston.createLogger({
   ]
 });
 
-// ✅ Create transporter
 const createTransporter = () => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
     logger.error('Email configuration missing. Please check your .env file.');
