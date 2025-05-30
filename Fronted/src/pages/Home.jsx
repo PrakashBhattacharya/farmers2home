@@ -3,6 +3,7 @@ import '../styles/HomePage.css';
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,22 +49,25 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="homepage-container">
+    <div className="home-page">
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="navbar-title">FarmConnect</div>
         <ul className="nav-links">
           <li><a href="#">Home</a></li>
           <li><a href="#">Farmer</a></li>
           <li><a href="#">Buyer</a></li>
-          <li><a href="#">About</a></li>
+          <li><a href="#" onClick={(e) => {
+            e.preventDefault();
+            setIsAboutModalOpen(true);
+          }}>About</a></li>
           <li><a href="/register">Register</a></li>
           <li><a href="/login">Login</a></li>
           <li><a href="#" className="cart-icon">🛒</a></li>
         </ul>
       </nav>
 
-      <header className="hero-section">
-        <div className="hero-text">
+      <div className="hero-section">
+        <div className="hero-content">
           <h1>Fresh Farm Products Delivered to You</h1>
           <p>
             FarmConnect helps you buy fresh produce directly from the source — local farmers.
@@ -80,7 +84,96 @@ export default function HomePage() {
             className="hero-image"
           />
         </div>
-      </header>
+      </div>
+
+      {isAboutModalOpen && (
+        <div 
+          className={`about-modal-overlay ${isAboutModalOpen ? 'active' : ''}`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsAboutModalOpen(false);
+            }
+          }}
+        >
+          <div className="about-modal">
+            <button 
+              className="modal-close-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsAboutModalOpen(false);
+              }}
+            >
+              ×
+            </button>
+            <div className="about-content">
+              <h2>Our Mission</h2>
+              <p>
+                At FarmConnect, our mission is to revolutionize the agricultural supply chain by directly connecting farmers with consumers. 
+                We aim to eliminate middlemen, reduce costs, and ensure fair prices for both farmers and buyers.
+              </p>
+
+              <h2>Our Vision</h2>
+              <p>
+                We envision a sustainable future where farmers receive fair compensation for their hard work, 
+                consumers get fresh and authentic produce, and the environment benefits from reduced carbon footprint.
+              </p>
+
+              <h2>What We Do</h2>
+              <div className="about-grid">
+                <div className="about-card">
+                  <h3>Direct Connection</h3>
+                  <p>
+                    We provide a platform that directly connects farmers with consumers, 
+                    allowing them to buy fresh produce directly from the source.
+                  </p>
+                </div>
+                
+                <div className="about-card">
+                  <h3>Quality Assurance</h3>
+                  <p>
+                    We ensure that all our farmers follow sustainable farming practices and 
+                    maintain high standards of quality in their produce.
+                  </p>
+                </div>
+                
+                <div className="about-card">
+                  <h3>Support Local</h3>
+                  <p>
+                    By supporting local farmers, we help strengthen the local economy and 
+                    promote sustainable agricultural practices.
+                  </p>
+                </div>
+                
+                <div className="about-card">
+                  <h3>Transparency</h3>
+                  <p>
+                    We provide complete transparency about the source of the produce, 
+                    farming practices, and pricing structure.
+                  </p>
+                </div>
+              </div>
+
+              <h2>Our Impact</h2>
+              <div className="impact-stats">
+                <div className="stat-card">
+                  <h3>1000+</h3>
+                  <p>Local Farmers Connected</p>
+                </div>
+                
+                <div className="stat-card">
+                  <h3>5000+</h3>
+                  <p>Satisfied Customers</p>
+                </div>
+                
+                <div className="stat-card">
+                  <h3>100%</h3>
+                  <p>Fresh Produce</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="categories-section">
         <h2>Shop by Category</h2>
@@ -111,23 +204,18 @@ export default function HomePage() {
         <div className="testimonials-grid">
           {testimonials.map(testimonial => (
             <div key={testimonial.id} className="testimonial-card">
-              <img src={testimonial.image} alt={testimonial.name} />
-              <h3>{testimonial.name}</h3>
+              <img src={testimonial.image} alt={testimonial.name} className="testimonial-image" />
               <p>{testimonial.text}</p>
-              <div className="rating">
-                {'⭐'.repeat(testimonial.rating)}
+              <div className="testimonial-meta">
+                <span className="testimonial-name">{testimonial.name}</span>
+                <div className="rating">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i} className="star">⭐</span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <h2>Join Our Community</h2>
-        <p>Be part of the sustainable farming revolution</p>
-        <div className="cta-buttons">
-          <a href="/register" className="cta-button">Sign Up as Farmer</a>
-          <a href="/register" className="cta-button secondary">Sign Up as Buyer</a>
         </div>
       </section>
 
