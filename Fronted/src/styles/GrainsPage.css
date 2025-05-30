@@ -1,0 +1,100 @@
+.grains-page {
+  padding: 80px 20px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7f7f7 0%, #e8f5e9 100%);
+}
+
+.grains-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.grains-header h1 {
+  color: #827717;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.grains-header p {
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.grains-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 0 10px;
+}
+
+.grain-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.grain-card:hover {
+  transform: translateY(-5px);
+}
+
+.grain-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.grain-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grain-details {
+  padding: 20px;
+}
+
+.grain-details h3 {
+  color: #827717;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.grain-price {
+  color: #f44336;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.grain-description {
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.add-to-cart {
+  width: 100%;
+  padding: 12px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-to-cart:hover {
+  background: #45a049;
+}
+
+@media (max-width: 768px) {
+  .grains-header h1 {
+    font-size: 2rem;
+  }
+  
+  .grain-card {
+    margin: 10px;
+  }
+}

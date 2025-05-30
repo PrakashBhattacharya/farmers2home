@@ -52,18 +52,20 @@ export default function HomePage() {
     <div className="home-page">
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="navbar-title">FarmConnect</div>
-        <ul className="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Farmer</a></li>
-          <li><a href="#">Buyer</a></li>
-          <li><a href="#" onClick={(e) => {
-            e.preventDefault();
-            setIsAboutModalOpen(true);
-          }}>About</a></li>
-          <li><a href="/register">Register</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="#" className="cart-icon">🛒</a></li>
-        </ul>
+        <div className="nav-right">
+          <ul className="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Farmer</a></li>
+            <li><a href="#">Buyer</a></li>
+            <li><a href="#" onClick={(e) => {
+              e.preventDefault();
+              setIsAboutModalOpen(true);
+            }}>About</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="#" className="cart-icon">🛒</a></li>
+          </ul>
+        </div>
       </nav>
 
       <div className="hero-section">
@@ -179,10 +181,10 @@ export default function HomePage() {
         <h2>Shop by Category</h2>
         <div className="categories-grid">
           {categories.map(category => (
-            <div key={category.id} className="category-card">
+            <a key={category.id} href={`/category/${category.name.toLowerCase()}`} className="category-card">
               <img src={category.image} alt={category.name} />
               <h3>{category.name}</h3>
-            </div>
+            </a>
           ))}
         </div>
       </section>

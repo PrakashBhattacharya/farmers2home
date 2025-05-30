@@ -2,9 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Home from './pages/Home';
+import HomePage from './pages/Home';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import Fruits from './pages/Fruits';
+import Vegetables from './pages/Vegetables';
+import Grains from './pages/Grains';
 import FarmerDashboard from './pages/FarmerDashboard';
 import CustomerDashboard from './pages/CustomerDashboard';
 import OrderHistory from './pages/OrderHistory';
@@ -16,9 +19,12 @@ function App() {
       <Router>
         <Routes>
           {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/category/fruits" element={<Fruits />} />
+          <Route path="/category/vegetables" element={<Vegetables />} />
+          <Route path="/category/grains" element={<Grains />} />
 
           {/* Farmer Routes */}
           <Route
